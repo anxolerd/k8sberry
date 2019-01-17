@@ -1,0 +1,24 @@
+---
+- name: Apply common configuration
+  hosts: all
+  become: yes
+  roles:
+    - common
+
+- name: Install kubadm on cluster nodes
+  hosts: kubernetes
+  become: yes
+  roles:
+    - kubeadm
+
+# - name: Configure kubernetes master nodes
+#   hosts: masters
+#   become: yes
+#   roles:
+#     - kubernetes-master
+# 
+# - name: Configure kubernetes worker node
+#   hosts: workers
+#   become: yes
+#   roles:
+#     - kubernetes-worker
