@@ -1,0 +1,17 @@
+---
+- name: Import Google Cloud Signing Key
+  apt_key:
+    id: BA07F4FB
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Install Kubernetes Repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    filename: kubernetes
+    state: present
+
+- name: Install kubeadm
+  apt:
+    name: "kubeadm={{ kubeadmVersion }}"
+    state: present 
