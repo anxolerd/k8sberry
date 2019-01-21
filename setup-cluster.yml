@@ -11,12 +11,18 @@
   roles:
     - kubeadm
 
+- name: Install haproxy on loadbalancer nodes
+  hosts: loadbalancers
+  become: yes
+  roles:
+    - haproxy
+
 # - name: Configure kubernetes master nodes
 #   hosts: masters
 #   become: yes
 #   roles:
 #     - kubernetes-master
-# 
+#
 # - name: Configure kubernetes worker node
 #   hosts: workers
 #   become: yes
