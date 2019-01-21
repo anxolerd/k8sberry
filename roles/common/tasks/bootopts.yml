@@ -4,6 +4,7 @@
   changed_when: false
   register: boot_cmdline_txt
   failed_when: boot_cmdline_txt.rc == 2
+
 - name: Add cgroup cmdline to boot options
   template:
     src: cmdline.txt.j2

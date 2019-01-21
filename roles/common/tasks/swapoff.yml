@@ -1,1 +1,12 @@
 ---
+- name: Disable swap
+  command: dphys-swapfile swapoff
+
+- name: Uninstall disabled swap
+  command: dphys-swapfile uninstall
+
+- name: Disable swap creation at boot
+  service:
+    name: dphys-swapfile
+    state: stopped
+    enabled: no
