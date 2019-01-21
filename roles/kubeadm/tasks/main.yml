@@ -14,4 +14,9 @@
 - name: Install kubeadm
   apt:
     name: "kubeadm={{ kubeadmVersion }}"
-    state: present 
+    state: present
+
+- name: Install kubectl
+  apt:
+    name: "kubectl={{ kubeadmVersion }}"
+    state: present
