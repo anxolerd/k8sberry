@@ -1,3 +1,5 @@
 ---
 - name: reboot system
   reboot:
+- name: disable and uninstall swap
+  shell: dphys-swapfile swapoff && dphys-swapfile uninstall
