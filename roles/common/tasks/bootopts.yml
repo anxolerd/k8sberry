@@ -1,0 +1,23 @@
+---
+- name: Check boot cmdline for cgroup config
+  command: grep -v "cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" /boot/cmdline.txt
+  changed_when: false
+  register: boot_cmdline_txt
+  failed_when: boot_cmdline_txt.rc == 2
+- name: Add cgroup cmdline to boot options
+  template:
+    src: cmdline.txt.j2
+    dest: /boot/cmdline.txt
+    owner: root
+    group: root
+    mode: 0755
+  when: boot_cmdline_txt.stdout != ""
+  notify: reboot system
+
+- name: Decrease GPU memory
+  lineinfile:
+    path: /boot/config.txt
+    regexp: '^gpu_mem='
+    line: 'gpu_mem=16'
+    state: present
+  notify: reboot system

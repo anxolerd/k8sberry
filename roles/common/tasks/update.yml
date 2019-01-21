@@ -1,0 +1,16 @@
+---
+- name: Update software
+  apt:
+    name: "*"
+    state: latest
+
+- name: Update dist
+  apt:
+    upgrade: dist
+  notify: reboot system
+
+- name: Make sure SSH daemon is running
+  service:
+    name: ssh
+    state: started
+    enabled: yes
