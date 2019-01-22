@@ -1,0 +1,9 @@
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+kubernetesVersion: {{ kubernetesVersion }}
+apiServer:
+  certSANs:
+  - "{{ groups['loadbalancers'][0] }}"
+controlPlaneEndpoint: "{{ groups['loadbalancers'][0] }}:{{ apiserverLBPort }}"
+networking:
+  podSubnet: 10.244.0.0/16

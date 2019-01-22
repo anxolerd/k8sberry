@@ -1,2 +1,3 @@
 ---
-# tasks file for kubernetes-master
+- include: primary-master.yml
+- include: joined-master.yml

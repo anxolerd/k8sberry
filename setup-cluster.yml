@@ -18,11 +18,11 @@
   roles:
     - haproxy
 
-# - name: Configure kubernetes master nodes
-#   hosts: masters
-#   become: yes
-#   roles:
-#     - kubernetes-master
+- name: Configure kubernetes master nodes
+  hosts: masters
+  become: yes
+  roles:
+    - kubernetes-master
 #
 # - name: Configure kubernetes worker node
 #   hosts: workers
