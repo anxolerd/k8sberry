@@ -10,6 +10,7 @@
   become: yes
   roles:
     - kubepackages
+    - kernelopts
 
 - name: Install haproxy on loadbalancer nodes
   hosts: loadbalancers

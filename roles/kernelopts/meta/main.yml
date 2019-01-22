@@ -1,0 +1,4 @@
+galaxy_info:
+  author: Oleksandr Kovalchuk
+  description: Configure kernel options and modules
+dependencies: []

@@ -1,0 +1,15 @@
+---
+- name: load br_netfilter module
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Pass bridged IPv4 traffic to iptables' chains
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    state: present
+  with_items:
+    - net.ipv4.ip_forward
+    - net.bridge.bridge-nf-call-iptables
+
