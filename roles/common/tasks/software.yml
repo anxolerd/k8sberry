@@ -1,0 +1,10 @@
+---
+- name: Install rsync
+  apt:
+    name: rsync
+    state: present
+
+- name: Install net-tools (provides netstat)
+  apt:
+    name: net-tools
+    state: present
