@@ -11,12 +11,10 @@
     filename: kubernetes
     state: present
 
-- name: Install kubeadm
+- name: Install kubeadm, kubelet and kubectl
   apt:
-    name: "kubeadm={{ kubeadmVersion }}"
-    state: present
-
-- name: Install kubectl
-  apt:
-    name: "kubectl={{ kubeadmVersion }}"
+    name:
+      - "kubeadm={{ kubeadmVersion }}"
+      - "kubelet={{ kubeadmVersion }}"
+      - "kubectl={{ kubeadmVersion }}"
     state: present

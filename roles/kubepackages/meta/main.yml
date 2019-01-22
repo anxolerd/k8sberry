@@ -1,0 +1,6 @@
+galaxy_info:
+  author: Oleksandr Kovalchuk
+  description: |
+    Install software required to setup Kubernetes cluster.
+    kubeadm, kubelet, kubectl
+dependencies: []

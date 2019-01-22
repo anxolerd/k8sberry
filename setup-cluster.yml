@@ -9,7 +9,7 @@
   hosts: kubernetes
   become: yes
   roles:
-    - kubeadm
+    - kubepackages
 
 - name: Install haproxy on loadbalancer nodes
   hosts: loadbalancers

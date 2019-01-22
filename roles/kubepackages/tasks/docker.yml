@@ -1,0 +1,17 @@
+---
+- name: Import Docker Signing Key
+  apt_key:
+    id: 0EBFCD88
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Install Docker Repository
+  apt_repository:
+    repo: deb [arch=armhf] https://download.docker.com/linux/debian stretch stable
+    filename: docker
+    state: present
+
+- name: Install docker-ce
+  apt:
+    name: "docker-ce={{ dockerVersion }}"
+    state: present

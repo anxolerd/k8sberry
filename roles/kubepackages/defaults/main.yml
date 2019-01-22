@@ -1,0 +1,3 @@
+---
+kubeadmVersion: 1.13.2-00
+dockerVersion: 5:18.09.1~3-0~debian-stretch
