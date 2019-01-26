@@ -1,4 +1,9 @@
 ---
+- name: Check if kubeadm has already run
+  stat:
+    path: "/var/lib/kubelet/config.yaml"
+  register: kubeadm_already_run
+
 - name: Create kubeadm configuration file
   template:
     src: kubeadm-config.yaml.j2
@@ -11,12 +16,18 @@
 
 - name: Reset kubernetes cluster
   command: kubeadm reset -f
-  when: inventory_hostname == groups['masters'][0]
+  when: inventory_hostname == groups['masters'][0] and kubeadm_config.changed
   register: kubeadm_reset
+
+- name: Drop flannel conenction
+  net_interface:
+    name: flannel.1
+    state: absent
+  when: inventory_hostname == groups['masters'][0] and kubeadm_config.changed
 
 - name: Init kubernetes master node
   command: kubeadm init --config=/root/kubeadm-config.yaml
-  when: inventory_hostname == groups['masters'][0]
+  when: inventory_hostname == groups['masters'][0] and not kubeadm_already_run.stat.exists and kubeadm_config.changed
   register: kubeadm_init
 
 - name: Apply flannel

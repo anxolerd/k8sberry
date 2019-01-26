@@ -1,1 +1,57 @@
 ---
+- name: Check if token exists
+  delegate_to: "{{ groups['masters'] | first }}"
+  run_once: true
+  changed_when: false
+  shell: kubeadm token list | tail -n 1 | awk '{print $1}'
+  register: existing_token
+
+- name: Generate new token
+  delegate_to: "{{ groups['masters'] | first }}"
+  run_once: true
+  command: kubeadm token create
+  register: new_token
+  when: existing_token.stdout == 'TOKEN'
+
+- name: Set token fact
+  set_fact: 
+    kubeadm_join_token: "{{ existing_token.stdout if existing_token.stdout != 'TOKEN' else new_token.stdout }}"
+
+- name: Calculate ca certificate hash
+  shell: >
+    openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt
+    | openssl rsa -pubin -outform der 2>/dev/null
+    | openssl dgst -sha256 -hex
+    | sed 's/^.* //'
+  register: calc_kubeadm_ca_hash
+  delegate_to: "{{ groups['masters'] | first }}"
+  changed_when: false
+  run_once: true
+
+- name: Set ca certificate hash fact
+  set_fact: 
+    kubeadm_ca_hash: "{{ calc_kubeadm_ca_hash.stdout }}"
+
+- name: Sync certificates from primary master
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ item }}"
+  delegate_to: "{{ groups['masters'] | first }}"
+  with_items:
+    - /etc/kubernetes/pki/ca.crt
+    - /etc/kubernetes/pki/ca.key
+    - /etc/kubernetes/pki/sa.key
+    - /etc/kubernetes/pki/sa.pub
+    - /etc/kubernetes/pki/front-proxy-ca.crt
+    - /etc/kubernetes/pki/front-proxy-ca.key
+    - /etc/kubernetes/pki/etcd/ca.crt
+    - /etc/kubernetes/pki/etcd/ca.key
+    - /etc/kubernetes/admin.conf
+
+- name: Join master node to cluster
+  command: >
+    kubeadm join {{ groups['loadbalancers'][0] }}:{{ apiserverLBPort }}
+    --token={{ kubeadm_join_token }}
+    --discovery-token-ca-cert-hash sha256:{{ kubeadm_ca_hash }}
+    --experimental-control-plane
+  when: inventory_hostname != groups['masters'][0]

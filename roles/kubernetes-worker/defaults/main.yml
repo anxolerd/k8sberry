@@ -1,2 +1,3 @@
 ---
-# defaults file for kubernetes-worker
+apiserverLBPort: 6445
+kubernetesVersion: 1.13.2
