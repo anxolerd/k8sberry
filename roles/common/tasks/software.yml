@@ -1,10 +1,8 @@
 ---
-- name: Install rsync
+- name: Install software for provisioning and troubleshooting
   apt:
-    name: rsync
-    state: present
-
-- name: Install net-tools (provides netstat)
-  apt:
-    name: net-tools
+    name:
+      - net-tools
+      - openssl
+      - rsync
     state: present
