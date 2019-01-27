@@ -14,7 +14,7 @@
   when: existing_token.stdout == 'TOKEN'
 
 - name: Set token fact
-  set_fact: 
+  set_fact:
     kubeadm_join_token: "{{ existing_token.stdout if existing_token.stdout != 'TOKEN' else new_token.stdout }}"
 
 - name: Calculate ca certificate hash
@@ -29,12 +29,12 @@
   run_once: true
 
 - name: Set ca certificate hash fact
-  set_fact: 
+  set_fact:
     kubeadm_ca_hash: "{{ calc_kubeadm_ca_hash.stdout }}"
 
 - name: Join worker node to cluster
   command: >
-    kubeadm join {{ groups['loadbalancers'][0] }}:{{ apiserverLBPort }} 
+    kubeadm join {{ groups['loadbalancers'][0] }}:{{ apiserverLBPort }}
     --token={{ kubeadm_join_token }}
     --discovery-token-ca-cert-hash sha256:{{ kubeadm_ca_hash }}
   when: inventory_hostname in groups['workers']
