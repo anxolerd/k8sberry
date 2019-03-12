@@ -1,4 +1,0 @@
-galaxy_info:
-  author: Oleksandr Kovalchuk
-  description: Setup kubernetes worker node
-dependencies: []

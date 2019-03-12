@@ -1,6 +1,0 @@
-galaxy_info:
-  author: Oleksandr Kovalchuk
-  description: |
-    Install and configure haproxy as load balancer
-    for k8s master nodes
-dependencies: []
