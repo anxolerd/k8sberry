@@ -1,0 +1,21 @@
+---
+- name: Reset kubernetes cluster
+  command: kubeadm reset -f
+
+- name: Drop flannel interface
+  command: ip link delete flannel.1
+
+- include: primary-master.yml
+  when: inventory_hostname == groups['masters'][0]
+
+- include: prepare-to-join.yml
+
+- include: joined-master.yml
+  when: inventory_hostname in groups['masters']
+
+- include: worker.yml
+  when: inventory_hostname in groups['workers']
+
+- include: traefik.yml
+  run_once: true
+  delegate_to: "{{ groups['masters'] | first }}"

@@ -1,0 +1,18 @@
+---
+- name: Create kubeadm configuration file
+  template:
+    src: kubeadm-config.yaml.j2
+    dest: /root/kubeadm-config.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Init kubernetes master node
+  command: kubeadm init --config=/root/kubeadm-config.yaml
+
+- name: Apply flannel
+  command: |
+    kubectl \
+      --kubeconfig=/etc/kubernetes/admin.conf \
+      apply -f \
+      https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml

@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik
+  namespace: kube-system
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: traefik-role
+rules:
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs:
+    - get
+    - watch
+    - list
+    - proxy
+    - use
+    - redirect
+- apiGroups:
+    - "extensions"
+  resources:
+    - "ingresses"
+  verbs:
+    - get
+    - watch
+    - list
+    - proxy
+    - use
+    - redirect
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: traefik-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-role
+subjects:
+- kind: ServiceAccount
+  name: traefik
+  namespace: kube-system

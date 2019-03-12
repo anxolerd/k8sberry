@@ -1,0 +1,16 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: traefik-cfg
+  namespace: kube-system
+data:
+  traefik.toml: |
+    # traefik.toml
+    defaultEntryPoints = ["http","https","grpc"]
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
+      [entryPoints.https]
+      address = ":443"
+      [entryPoint.grpc]
+      address = ":50051"

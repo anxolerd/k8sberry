@@ -1,0 +1,9 @@
+---
+- name: Reset kubelet setup
+  command: kubeadm reset -f
+
+- name: Join worker node to cluster
+  command: >
+    kubeadm join {{ groups['loadbalancers'][0] }}:{{ apiserverLBPort }}
+    --token={{ kubeadm_join_token }}
+    --discovery-token-ca-cert-hash sha256:{{ kubeadm_ca_hash }}

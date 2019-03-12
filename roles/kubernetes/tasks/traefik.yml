@@ -1,0 +1,32 @@
+---
+- name: Create directory for traefik manifest files
+  file:
+    path: /etc/traefik/manifests
+    state: directory
+    mode: 0755
+
+- name: Copy traefik manifests
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/traefik/manifests/{{ item }}"
+  with_items: 
+    - traefik-rbac.yml
+    - traefik-configmap.yml
+    - traefik-deployment.yml
+  register: traefik_manifests
+
+- name: Apply traefik manifests
+  command: |
+    kubectl \
+      --kubeconfig=/etc/kubernetes/admin.conf \
+      apply -f /etc/traefik/manifests/{{ item }}
+  with_items:
+    - traefik-rbac.yml
+    - traefik-configmap.yml
+    - traefik-deployment.yml
+  when: traefik_manifests.changed
+
+- name: Cleanup manifests
+  file:
+    path: /etc/traefik
+    state: absent
